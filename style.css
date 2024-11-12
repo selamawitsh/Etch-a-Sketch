@@ -1,0 +1,23 @@
+#container{
+    width:480px;
+    display:flex;
+    flex-wrap: wrap;
+    height: 480px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.square {
+    width: 30px;
+    height: 30px;
+    box-sizing: border-box;
+}
+.header {
+    padding: 30px 0;
+  }
+h1 {
+    line-height: 1.2;
+  }  
+header, footer {
+    text-align: center;
+  
+}
