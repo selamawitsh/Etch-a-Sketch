@@ -1,11 +1,75 @@
-const container=document.getElementById('container')
+//size slider
+// Set a default grid size of 16 and store it in `currentSize`
+// Function to update `currentSize` and recreate the grid
+// Get the size slider element from the HTML
+// Add an event listener to detect changes on the slider
+// Update the current size of the grid to the new slider value
+// Display the updated grid size as "value x value" in sizeValue
+let default_size=16
+let currentSize=default_size
 
-for(i=0;i<16*16;i++){
-    const square=document.createElement('div')
-    square.classList.add('square')
-    container.appendChild(square)
-
+function setCurrentSize(value){
+    currentSize=value
+    createGrid(currentSize)
 }
+const sizeSlider=document.getElementById('sizeSlider')
+
+sizeSlider.addEventListener('change',function(e){
+    setCurrentSize(e.target.value)
+    sizeValue.innerHTML = `${e.target.value} x ${e.target.value}`
+})
+
+// Refactored createGrid function to make the grid resizable based on input size
+
+// - Added `size` parameter to createGrid to allow dynamic grid dimensions
+// - Set `container` to fixed 480px by 480px size, and calculated each square's size as `containerSize / size`
+// - Used flexbox to layout squares in a wrapped grid structure
+// - Updated event listener to apply color changes on mouseover
+
+function createGrid(size) {
+    const container = document.getElementById('container');
+    container.innerHTML = ''; 
+
+    const containerSize = 480; 
+    container.style.width = `${containerSize}px`;
+    container.style.height = `${containerSize}px`;
+
+    container.style.display = 'flex';
+    container.style.flexWrap = 'wrap';
+
+    const squareSize = containerSize / size;
+
+    for (let i = 0; i < size * size; i++) {
+        const square = document.createElement('div');
+        square.classList.add('square');
+
+        square.style.width = `${squareSize}px`;
+        square.style.height = `${squareSize}px`;
+
+        square.addEventListener('mouseover', function(event) {
+            if (isMouseDown) {
+                event.target.style.backgroundColor = currentMode === 'color' ? currentColor : '#fefefe';
+            }
+        });
+
+        container.appendChild(square);
+    }
+}
+
+
+let isMouseDown=false
+document.addEventListener('mousedown',function(){
+    isMouseDown=true;
+})
+
+document.addEventListener('mouseup',function(){
+    isMouseDown=false;
+})
+createGrid(currentSize)
+
+
+
+
 //to choose the color
 // Set the initial color to the default color value
 // Define a function to update the current color
@@ -65,34 +129,12 @@ function activateButton(newMode) {
   }
 
 // to clear
+// after clearing to start drawing call the createGrid function and activateButton function
 const clear=document.getElementById('clear')
 clear.addEventListener('click',function(){
     container.innerHTML='';
-})
-
-
-
-// Add mouseover event listeners to each grid square. 
-// When the mouse enters a square, change its color. 
-const squareGrid =(document.getElementsByClassName('square'));
-for (let i=0;i<squareGrid.length;i++){
-    squareGrid[i].addEventListener('mouseover',function(event){
-        if(isMouseDown){
-         if (currentMode === 'color') {
-            event.target.style.backgroundColor = currentColor
-          } else if (currentMode === 'eraser') {
-            event.target.style.backgroundColor = '#fefefe'
-          }
-        }
-    })
-}
-let isMouseDown=false
-document.addEventListener('mousedown',function(){
-    isMouseDown=true;
-})
-
-document.addEventListener('mouseup',function(){
-    isMouseDown=false;
+    createGrid(currentSize)
+    activateButton(DEFAULT_MODE)
 })
 
 
@@ -105,24 +147,5 @@ document.addEventListener('mouseup',function(){
 
 
 
-
-
-
-
-// for (let i = 0; i < squareGrid.length; i++) {
-//     squareGrid[i].addEventListener('mouseover', function(event) {
-//         if (isMouseDown) {
-//             event.target.style.backgroundColor = 'blue'; 
-//         }
-//     });
-// }
-// let isMouseDown = false;
-// document.addEventListener('mousedown', function() {
-//     isMouseDown = true;
-// });
-
-// document.addEventListener('mouseup', function() {
-//     isMouseDown = false;
-// });
 
 
